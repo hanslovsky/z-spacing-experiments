@@ -43,9 +43,9 @@ public class WipeOutExperiment
 		final String matrixPath = "resources/matrix.tif";
 		final int wipeStart = 200;
 		final int wipeStop = 300;
+
 		final FloatProcessor fp1 = new ImagePlus( matrixPath ).getProcessor().convertToFloatProcessor();
 		final FloatProcessor fp2 = new ImagePlus( matrixPath ).getProcessor().convertToFloatProcessor();
-
 		final int w = fp1.getWidth();
 		final int h = fp1.getHeight();
 
