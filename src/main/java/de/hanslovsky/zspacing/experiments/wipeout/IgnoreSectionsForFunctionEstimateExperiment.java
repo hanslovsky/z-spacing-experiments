@@ -8,6 +8,7 @@ import org.janelia.thickness.inference.Options;
 import org.janelia.thickness.inference.fits.GlobalCorrelationFitAverage;
 import org.janelia.thickness.inference.visitor.LazyVisitor;
 import org.janelia.thickness.lut.LUTRealTransform;
+import org.janelia.utility.OuterProductViews;
 
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -62,13 +63,15 @@ public class IgnoreSectionsForFunctionEstimateExperiment
 
 		final double[] startingCoordinates = IntStream.range( 0, w ).mapToDouble( i -> i ).toArray();
 
+		final double[] wipeOut = Arrays.stream( indices ).mapToDouble( i -> i < wipeStart || i >= wipeStop ? 1.0 : 0.0 ).toArray();
+
 		final double[] t1 = inf.estimateZCoordinates( m1, startingCoordinates.clone(), o );
 		final double[] t2 = inf.estimateZCoordinates(
 				m1,
 				startingCoordinates.clone(),
 				new double[0],
 				Arrays.stream( new double[w] ).map( d -> 1.0 ).toArray(),
-				Arrays.stream( indices ).mapToDouble( i -> i < wipeStart || i >= wipeStop ? 1.0 : 0.0 ).toArray(),
+				OuterProductViews.product( wipeOut, wipeOut ),
 				Arrays.stream( new double[w] ).map( d -> 1.0 ).toArray(),
 				new LazyVisitor(),
 				o );
